@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -22,8 +22,18 @@ import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const {
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+    getTokenSilently
+  } = useAuth0();
   const toggle = () => setIsOpen(!isOpen);
+  useEffect(async () => {
+    const token = await getTokenSilently();
+    console.info("getTokenSilently", token);
+  });
 
   const logoutWithRedirect = () =>
     logout({
